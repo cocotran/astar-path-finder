@@ -1,1 +1,3 @@
-# Covid19-Map-Simulation
+# Covid19 Map Simulation
+
+## Usage
