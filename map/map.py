@@ -28,19 +28,15 @@ class Map:
                 self._map.append(EmptyPlace())
 
         for i in range(width * height):
-            self._map[i].top_place = self._map[
-                i - width] if i - width >= 0 else None
-            self._map[i].bottom_place = self._map[
-                i + width] if i + width < width * height else None
-            self._map[i].left_place = self._map[i -
-                                                1] if i % width != 0 else None
-            self._map[i].right_place = self._map[i +
-                                                 1] if i % width != 2 else None
+            self._map[i].top_place = self._map[i - width] if i - width >= 0 else None
+            self._map[i].bottom_place = self._map[i + width] if i + width < width * height else None
+            self._map[i].left_place = self._map[i - 1] if i % width != 0 else None
+            self._map[i].right_place = self._map[i + 1] if i % width != 2 else None
 
     def display_map(self, width: int, height: int) -> None:
         for y in range(height):
             for x in range(width):
-                print(self._map[y * width + x]._icon, end='   ')
+                print(self._map[y * width + x].get_icon(), end='   ')
             print("\n")
 
 

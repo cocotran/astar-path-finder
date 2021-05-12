@@ -20,6 +20,9 @@ class Place:
     def get_cost(self) -> int:
         return self._cost_for_role_P
 
+    def get_icon(self) -> str:
+        return self._icon
+
 
 class QuarantinePlace(Place):
     def __init__(self) -> None:
