@@ -1,4 +1,4 @@
-from node import *
+from map.node import *
 
 INF: float = float('inf')
 

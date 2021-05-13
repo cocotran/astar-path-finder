@@ -1,8 +1,10 @@
 import random
+import string
 
-from place import *
-from node import *
+from map.place import *
+from map.node import *
 
+NODE_NAME: list = list(string.ascii_uppercase) + list(string.ascii_lowercase)
 
 class Map:
     def __init__(self, width: int, height: int) -> None:
@@ -21,8 +23,9 @@ class Map:
 
     def _generate_vertices(self) -> None:
         for i in range((self._width + 1) * (self._height + 1)):
-            self._vertices.append(Node(str(i)))
-        self._vertices = [self._vertices[i:i + self._width + 1] for i in range(0, len(self._vertices), 3)]
+            node_name = NODE_NAME[i] if i < len(NODE_NAME) else str(i)
+            self._vertices.append(Node(node_name)) 
+        self._vertices = [self._vertices[i:i + self._width + 1] for i in range(0, len(self._vertices), self._width + 1)]
 
     def _assign_grid_neighbor(self) -> None:
         for i in range(self._width * self._height):
@@ -53,9 +56,13 @@ class Map:
 
     def display_map(self) -> None:
         for y in range(self._height):
+            for i in range(self._width + 1):
+                end_mark: str = '-----' if i % (self._width + 1) != self._width else '\n'
+                print(self._vertices[y][i]._name, end=end_mark)
             for x in range(self._width):
-                print(self._map[y * self._width + x].get_icon(), end='   ')
-            print("\n")
-
-
-map = Map(2, 2)
+                print('|', end='  ')
+                print(self._map[y * self._width + x].get_icon(), end='  ')
+                print('|', end='\n') if x % (self._width) == self._width - 1 else None
+        for i in range(self._width + 1):
+                end_mark: str = '-----' if i % (self._width + 1) != self._width else '\n'
+                print(self._vertices[-1][i]._name, end=end_mark) # Get the last nested list to draw the bottom line of the map 
