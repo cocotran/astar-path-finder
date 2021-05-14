@@ -1,3 +1,3 @@
 from map.map import *
 
-map = Map(4, 4)
+map = Map(2, 2)
