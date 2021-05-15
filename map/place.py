@@ -8,14 +8,6 @@ class Place:
         self._type: str = ""
         self._icon: str = ""
         self._cost_for_role_C: int = 0
-        self.top_place: Place = None
-        self.bottom_place: Place = None
-        self.left_place: Place = None
-        self.right_place: Place = None
-        self.top_left_node: Node = None
-        self.top_right_node: Node = None
-        self.bottom_left_node: Node = None
-        self.bottom_right_node: Node = None
 
     def get_cost(self) -> int:
         return self._cost_for_role_P

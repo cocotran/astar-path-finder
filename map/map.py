@@ -19,7 +19,6 @@ class Map:
         self._generate_vertices()
         self._assign_node_neighbor()
         self._assign_grid_vertices()
-        self.display_map()
 
     def _generate_new_map(self) -> None:
         for i in range(self._width * self._height):
@@ -35,9 +34,11 @@ class Map:
         self._map = [self._map[i:i + self._width] for i in range(0, len(self._map), self._width)]
 
     def _generate_vertices(self) -> None:
-        for i in range((self._width + 1) * (self._height + 1)):
-            node_name = NODE_NAME[i] if i < len(NODE_NAME) else str(i)
-            self._vertices.append(Node(node_name)) 
+        for y in range(self._height + 1):
+            for x in range(self._width + 1):
+                index: int = y * (self._width + 1) + x
+                node_name = NODE_NAME[index] if index < len(NODE_NAME) else str(index)
+                self._vertices.append(Node(node_name, float(x), float(y))) 
 
     def _assign_node_neighbor(self) -> None:
         for i in range((self._width + 1) * (self._height + 1)):
