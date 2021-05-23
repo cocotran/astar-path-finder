@@ -27,7 +27,8 @@ class Node:
         if self.top_node != None:
             if self.left_node != None:
                 if self.right_node != None: # Left & Right
-                    self.__neighbors[self.top_node] = self.top_left_place.get_cost() + self.top_right_place.get_cost() / 2
+                    cost: float = self.top_left_place.get_cost() + self.top_right_place.get_cost() / 2
+                    self.__neighbors[self.top_node] = cost if cost < 3.0 else float('inf')
                 else: # left & !Right
                     self.__neighbors[self.top_node] = self.top_left_place.get_cost()
             else: # !Left & Right
@@ -37,7 +38,8 @@ class Node:
         if self.bottom_node != None:
             if self.left_node != None:
                 if self.right_node != None: # Left & Right
-                    self.__neighbors[self.bottom_node] = self.bottom_left_place.get_cost() + self.bottom_right_place.get_cost() / 2
+                    cost: float = self.bottom_left_place.get_cost() + self.bottom_right_place.get_cost() / 2
+                    self.__neighbors[self.bottom_node] = cost if cost < 3.0 else float('inf')
                 else: # left & !Right
                     self.__neighbors[self.bottom_node] = self.bottom_left_place.get_cost()
             else: # !Left & Right
@@ -47,7 +49,8 @@ class Node:
         if self.left_node != None:
             if self.top_node != None:
                 if self.bottom_node != None: # Top & Bot
-                    self.__neighbors[self.left_node] = self.top_left_place.get_cost() + self.bottom_left_place.get_cost() / 2
+                    cost: float = self.top_left_place.get_cost() + self.bottom_left_place.get_cost() / 2
+                    self.__neighbors[self.left_node] = cost if cost < 3.0 else float('inf')
                 else: # Top & !Bot
                     self.__neighbors[self.left_node] = self.top_left_place.get_cost()
             else: # !Top & Bot
@@ -57,7 +60,8 @@ class Node:
         if self.right_node != None:
             if self.top_node != None:
                 if self.bottom_node != None: # Top & Bot
-                    self.__neighbors[self.right_node] = self.top_right_place.get_cost() + self.bottom_right_place.get_cost() / 2
+                    cost: float = self.top_right_place.get_cost() + self.bottom_right_place.get_cost() / 2
+                    self.__neighbors[self.right_node] = cost if cost < 3.0 else float('inf')
                 else: # Top & !Bot
                     self.__neighbors[self.right_node] = self.top_right_place.get_cost()
             else: # !Top & Bot
