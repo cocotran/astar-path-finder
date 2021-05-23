@@ -13,61 +13,55 @@ class Node:
         self.bottom_left_place: Place = None
         self.bottom_right_place: Place = None
 
-        self.__neighbors: list = []
-        self.__x: float = x
-        self.__y: float = y
-        self.f: float = 0.0
-        self.g: float = 0.0
-        self.h: float = 0.0
+        self.__neighbors: dict = {}
+        self.x: float = x
+        self.y: float = y
+        self.parent: Node = None
+        self.isVisited: bool = False
+        self.global_goal: float = float('inf')
+        self.local_goal: float = float('inf')
+        
 
-    def setManhattanDistanceHeuristic(self, end_node) -> None:
-        self.h = abs(self.__x - end_node.__x) + abs(self.__y - end_node.__y)
-
-    @staticmethod
-    def getManhattanDistanceHeuristic(current_node, end_node) -> float:
-        distance: float = abs(current_node.__x - end_node.__x) + abs(current_node.__y - end_node.__y)
-        return distance
-
-    def setNeighbors(self) -> None:
+    def set_neighbors_distance(self) -> None:
         # Top
         if self.top_node != None:
             if self.left_node != None:
                 if self.right_node != None: # Left & Right
-                    self.__neighbors.append({self.top_node: (self.top_left_place.get_cost() + self.top_right_place.get_cost()) / 2})
+                    self.__neighbors[self.top_node] = self.top_left_place.get_cost() + self.top_right_place.get_cost() / 2
                 else: # left & !Right
-                    self.__neighbors.append({self.top_node: self.top_left_place.get_cost()})
+                    self.__neighbors[self.top_node] = self.top_left_place.get_cost()
             else: # !Left & Right
-                self.__neighbors.append({self.top_node: self.top_right_place.get_cost()})
+                self.__neighbors[self.top_node] = self.top_right_place.get_cost()
 
         # Bottom
         if self.bottom_node != None:
             if self.left_node != None:
                 if self.right_node != None: # Left & Right
-                    self.__neighbors.append({self.bottom_node: (self.bottom_left_place.get_cost() + self.bottom_right_place.get_cost()) / 2})
+                    self.__neighbors[self.bottom_node] = self.bottom_left_place.get_cost() + self.bottom_right_place.get_cost() / 2
                 else: # left & !Right
-                    self.__neighbors.append({self.bottom_node: self.bottom_left_place.get_cost()})
+                    self.__neighbors[self.bottom_node] = self.bottom_left_place.get_cost()
             else: # !Left & Right
-                self.__neighbors.append({self.bottom_node: self.bottom_right_place.get_cost()})
+                self.__neighbors[self.bottom_node] = self.bottom_right_place.get_cost()
 
         # Left
         if self.left_node != None:
             if self.top_node != None:
                 if self.bottom_node != None: # Top & Bot
-                    self.__neighbors.append({self.left_node: (self.top_left_place.get_cost() + self.bottom_left_place.get_cost()) / 2})
+                    self.__neighbors[self.left_node] = self.top_left_place.get_cost() + self.bottom_left_place.get_cost() / 2
                 else: # Top & !Bot
-                    self.__neighbors.append({self.left_node: self.top_left_place.get_cost()})
+                    self.__neighbors[self.left_node] = self.top_left_place.get_cost()
             else: # !Top & Bot
-                self.__neighbors.append({self.left_node: self.bottom_left_place.get_cost()})
+                self.__neighbors[self.left_node] = self.bottom_left_place.get_cost()
             
         # Right
         if self.right_node != None:
             if self.top_node != None:
                 if self.bottom_node != None: # Top & Bot
-                    self.__neighbors.append({self.right_node: (self.top_right_place.get_cost() + self.bottom_right_place.get_cost()) / 2})
+                    self.__neighbors[self.right_node] = self.top_right_place.get_cost() + self.bottom_right_place.get_cost() / 2
                 else: # Top & !Bot
-                    self.__neighbors.append({self.right_node: self.top_right_place.get_cost()})
+                    self.__neighbors[self.right_node] = self.top_right_place.get_cost()
             else: # !Top & Bot
-                self.__neighbors.append({self.right_node: self.bottom_right_place.get_cost()})
+                self.__neighbors[self.right_node] = self.bottom_right_place.get_cost()
 
-    def getNeighbors(self) -> list:
+    def get_neighbors(self) -> list:
         return self.__neighbors

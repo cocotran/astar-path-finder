@@ -17,6 +17,7 @@ class Map:
         self.__generate_vertices__()
         self.__assign_node_neighbors__()
         self.__assign_grid_vertices__()
+        self.__set_nodes_neighbors_distance__()
 
     def __generate_new_map__(self) -> None:
         for i in range(self.__width * self.__height):
@@ -53,6 +54,13 @@ class Map:
                 self.__vertices[y * (self.__width + 1) + x].bottom_left_place = self.__map[y][x - 1] if x - 1 >= 0 and y < self.__height else None
                 self.__vertices[y * (self.__width + 1) + x].bottom_right_place = self.__map[y][x] if x < self.__width and y < self.__height else None
 
+    def __set_nodes_neighbors_distance__(self) -> None:
+        for i in self.__vertices:
+            i.set_neighbors_distance()
+
+    def get_vertices(self) -> list:
+        return self.__vertices
+
     def display_map(self) -> None:
         for y in range(self.__height + 1):
 
@@ -67,3 +75,5 @@ class Map:
                     print('|', end='  ')
                     print(self.__map[y][x].get_icon(), end='  ')
                     print('|', end='\n') if x == self.__width - 1 else None
+
+    
