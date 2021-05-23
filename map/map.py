@@ -4,6 +4,7 @@ import string
 from map.place import *
 from map.node import *
 
+# List of names for nodes
 NODE_NAME: list = list(string.ascii_uppercase) + list(string.ascii_lowercase)
 
 class Map:
@@ -61,18 +62,35 @@ class Map:
     def get_vertices(self) -> list:
         return self.__vertices
 
+    # Function to draw the map to the console
     def display_map(self) -> None:
+        pre_name: str = ""
+        post_name: str = ""
+        if len(self.__vertices) > 52:
+            pre_name = " "
+            post_name = " "
+
         for y in range(self.__height + 1):
 
             # Draw nodes
             for x in range(self.__width + 1):
                 end_mark: str = '-----' if x != self.__width else '\n'
-                print(self.__vertices[y * (self.__width + 1) + x].name, end=end_mark)
+                node_name: str = self.__vertices[y * (self.__width + 1) + x].name
+                if node_name.isalpha():
+                    if x != self.__width:
+                        print(pre_name + node_name + post_name, end=end_mark) 
+                    else:
+                        print(node_name, end=end_mark)
+                else:
+                    if len(node_name) == 2:
+                        print(node_name + post_name, end=end_mark)
+                    else:
+                        print(node_name, end=end_mark)
 
             # Draw grids
             for x in range(self.__width):
                 if y < self.__height:
-                    print('|', end='  ')
+                    print(pre_name + '|' + post_name, end='  ')
                     print(self.__map[y][x].get_icon(), end='  ')
                     print('|', end='\n') if x == self.__width - 1 else None
 

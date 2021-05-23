@@ -10,11 +10,13 @@ def a_star(start_node: Node, stop_node: Node) -> None:
         distance: float = abs(current_node.x - end_node.x) + abs(current_node.y - end_node.y)
         return distance
 
-    def print_nodes(nodes: list) -> None:
-        new_nodes: list = []
+    def print_path(nodes: list) -> None:
+        path: list = []
         for i in nodes:
-            new_nodes.append(i.name)
-        print(new_nodes)
+            path.append(i.name)
+        for i in range(len(path) - 1):
+            print(path[i] + " --> ", end="")
+        print(path[-1]) if path[-1] != None else None
 
     def get_path(end_node: Node) -> list:
         path: list = [end_node]
@@ -93,5 +95,5 @@ def a_star(start_node: Node, stop_node: Node) -> None:
     path: list = get_path(stop_node)
     cost: float = get_cost(path)
 
-    print_nodes(path)
-    print(cost)
+    print_path(path)
+    print("Cost: " + str(cost))
