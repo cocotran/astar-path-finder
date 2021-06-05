@@ -1,12 +1,13 @@
 from map import node
 from map.map import *
 from algorithm.astar import *
+from main import *
 
 map = Map(2, 2)
-map.display_map()
+print(map)
 
-start = map._Map__vertices[0]
-end = map._Map__vertices[-1]
+start = map._Map__nodes[0]
+end = map._Map__nodes[-1]
 
 assert start.x == 0.0
 assert start.y == 0.0
@@ -19,14 +20,14 @@ assert end.x == 2.0
 # start.setManhattanDistanceHeuristic(end)
 # assert start.h ==  4.0
 
-node_c: Node = map._Map__vertices[2] 
-assert node_c.top_node == None 
+node_c: Node = map._Map__nodes[2]
+assert node_c.top_node == None
 assert node_c.bottom_node.name == "F"
 assert node_c.left_node.name == "B"
 assert node_c.right_node == None
 
-node_e: Node = map._Map__vertices[4]
-assert node_e.top_node.name == "B" 
+node_e: Node = map._Map__nodes[4]
+assert node_e.top_node.name == "B"
 assert node_e.bottom_node.name == "H"
 assert node_e.left_node.name == "D"
 assert node_e.right_node.name == "F"
@@ -35,7 +36,7 @@ assert node_c.top_left_place == None
 assert node_c.top_right_place == None
 assert node_c.bottom_right_place == None
 
-graph_nodes: dict = map.get_vertices()
+graph_nodes: dict = map.get_nodes()
 
 neighbors: dict = start.get_neighbors()
 # for i in neighbors:
@@ -62,6 +63,29 @@ assert test_list[0] == node_1
 assert test_list[1] == node_2
 assert test_list[2] == node_3
 
-a_star(graph_nodes[0], graph_nodes[-1])
+assert get_node_index((0, 0), 2) == 0
+assert get_node_index((0, 0.05), 2) == 0
+assert get_node_index((0, 0.15), 2) == 3
+assert get_node_index((0.1, 0.2), 2) == 7
+assert get_node_index((0.15, 0.15), 2) == 4
+assert get_node_index((0.2, 0.1), 2) == 4
+assert get_node_index((0.3, 0.0), 2) == 2
+assert get_node_index((0.3, 0.15), 2) == 5
+
+assert is_within_boundary(2, 2, (0, 0)) == True
+assert is_within_boundary(2, 2, (0.1, 0.2)) == True
+assert is_within_boundary(2, 2, (0.4, 0.1)) == True
+assert is_within_boundary(2, 2, (0.3, 0.15)) == True
+assert is_within_boundary(2, 2, (0.15, 0.3)) == False
+assert is_within_boundary(2, 2, (0.5, 0.1)) == False
+assert is_within_boundary(2, 2, (-1, 0.1)) == False
+assert is_within_boundary(2, 2, (0.3, -0.1)) == False
+
+assert validate_start_end_point(map, (0, 0), (0.4, 0.1)) == True
+assert validate_start_end_point(map, (-1, 0), (0.4, 0.1)) == False
+assert validate_start_end_point(map, (0, 0), (0.5, 0.1)) == False
+assert validate_start_end_point(map, (0.1, 0.2), (0.3, 0.15)) == True
+
+# a_star(graph_nodes[0], graph_nodes[-1])
 
 print("All tests passed")
