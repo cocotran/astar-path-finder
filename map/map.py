@@ -9,7 +9,7 @@ NODE_NAME: list = list(string.ascii_uppercase) + list(string.ascii_lowercase)
 
 
 class Map:
-    def __init__(self, width: int, height: int) -> None:
+    def __init__(self, height: int, width: int) -> None:
         self.__grids: list = []  # 2 dimensional array
         self.__nodes: list = []  # 1 dimensional array
         self.__width: int = width  # _width: width of the map; _width + 1: number of nodes on each row
@@ -23,12 +23,12 @@ class Map:
 
     def __generate_new_map__(self) -> None:
         for i in range(self.__width * self.__height):
-            random_place: int = random.randint(0, 3)
+            random_place: int = random.randint(0, 5)
             if random_place == 0:
                 self.__grids.append(QuarantinePlace())
-            elif random_place == 1:
+            elif random_place == 1 or random_place == 2:
                 self.__grids.append(VaccineSpot())
-            elif random_place == 2:
+            elif random_place == 3 or random_place == 4:
                 self.__grids.append(PlayingGround())
             else:
                 self.__grids.append(EmptyPlace())
@@ -130,3 +130,18 @@ class Map:
 
     def get_node_by_index(self, index: int) -> Node:
         return self.__nodes[index]
+
+    def get_all_quarantine_nodes(self) -> list:
+        quarantine_nodes: list = []
+        for node in self.__nodes:
+            if node.bottom_left_place != None and node.bottom_left_place.type == "Quarantine Place":
+                quarantine_nodes.append(node)
+        return quarantine_nodes
+
+    def reset_all_node_states(self) -> None:
+        for node in self.__nodes:
+            node.isVisited = False
+            node.global_goal = float('inf')
+            node.local_goal = float('inf')
+            node.parent = None	# No parents
+            

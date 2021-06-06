@@ -1,10 +1,11 @@
 from typing import List
-from algorithm import astar
+from algorithm.astar import *
 from map.map import *
 from algorithm.astar import *
 
 import enum
 import math
+import argparse
 
 
 class Grid(enum.Enum):
@@ -66,25 +67,51 @@ def get_start_end_point() -> tuple:
     return start_point, end_point
 
 
-def find_path() -> None:
-    dimension: tuple(int) = input(
-        "Enter map dimension (row x column) (e.g., 3 x 4): ").replace(
-            " ", "").split("x")
-
-    map: Map = Map(int(dimension[0]), int(dimension[1]))
+def find_path(map: Map) -> None:
     print(map)
 
     start_point, end_point = get_start_end_point()
 
     if validate_start_end_point(map, start_point, end_point):
         start_node_index: int = get_node_index(start_point, map.get_width())
-        end_node_index: int = get_node_index(end_point, map.get_width())
 
         start_node: Node = map.get_node_by_index(start_node_index)
-        end_node: Node = map.get_node_by_index(end_node_index)
 
-        a_star(start_node, end_node)
+        all_quarantine_nodes: list = map.get_all_quarantine_nodes() # List of destination for role C
+
+        lowest_cost_path: float = float('inf')
+        path_with_lowest_cost: list = []
+
+        for i in all_quarantine_nodes:
+            map.reset_all_node_states()
+            cost, path = a_star(start_node, i)
+            if cost < lowest_cost_path:
+                lowest_cost_path = cost
+                path_with_lowest_cost = path
+        
+        print("")
+        print("Path to quarantine place with lowest cost:")
+        print_path(path_with_lowest_cost)
+        print("Cost: " + str(lowest_cost_path))
 
 
 if __name__ == '__main__':
-    find_path()
+
+    # Instantiate the parser
+    parser = argparse.ArgumentParser(description='A* Path Finding')    
+    
+    # Optional argument
+    parser.add_argument('--d', type=str, help='Map dimension (row x column) (e.g., 3x4)')
+
+    args = parser.parse_args()
+
+    map: Map = None
+    dimension = []
+
+    if args.d:
+        dimension = args.d.replace(" ", "").split("x")
+    else:
+        dimension = input("Enter map dimension (row x column) (e.g., 3 x 4): ").replace(" ", "").split("x")
+    
+    map = Map(int(dimension[0]), int(dimension[1]))
+    find_path(map)

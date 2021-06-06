@@ -22,6 +22,9 @@ class Node:
         self.global_goal: float = float('inf')
         self.local_goal: float = float('inf')
 
+    def __str__(self) -> str:
+        return self.name
+
     def set_neighbors_distance(self) -> None:
         # Top
         if self.top_node != None:

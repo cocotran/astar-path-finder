@@ -2,16 +2,7 @@ from map.node import Node
 from map.map import *
 
 
-# The heuristic function estimates the cost to reach goal from node n.
-# This implmentation uses Manhattan Distance Heuristic
-def a_star(start_node: Node, stop_node: Node) -> None:
-    def getManhattanDistanceHeuristic(current_node: Node,
-                                      end_node: Node) -> float:
-        distance: float = abs(current_node.x -
-                              end_node.x) + abs(current_node.y - end_node.y)
-        return distance
-
-    def print_path(nodes: list) -> None:
+def print_path(nodes: list) -> None:
         print("Path: ", end="")
         path: list = []
         for i in nodes:
@@ -19,6 +10,17 @@ def a_star(start_node: Node, stop_node: Node) -> None:
         for i in range(len(path) - 1):
             print(path[i] + " --> ", end="")
         print(path[-1]) if path[-1] != None else None
+
+
+# The heuristic function estimates the cost to reach goal from node n.
+# This implmentation uses Manhattan Distance Heuristic
+def a_star(start_node: Node, stop_node: Node) -> tuple:
+
+    def get_Manhattan_Distance_Heuristic(current_node: Node,
+                                      end_node: Node) -> float:
+        distance: float = abs(current_node.x -
+                              end_node.x) + abs(current_node.y - end_node.y)
+        return distance
 
     def get_path(end_node: Node) -> list:
         path: list = [end_node]
@@ -43,7 +45,7 @@ def a_star(start_node: Node, stop_node: Node) -> None:
     # Setup starting conditions
     current_node: Node = start_node
     start_node.local_goal = 0.0
-    start_node.global_goal = getManhattanDistanceHeuristic(
+    start_node.global_goal = get_Manhattan_Distance_Heuristic(
         start_node, stop_node)
 
     # Add start node to not tested list - this will ensure it gets tested.
@@ -94,11 +96,10 @@ def a_star(start_node: Node, stop_node: Node) -> None:
                 # the path algorithm, so it knows if its getting better or worse. At some
                 # point the algo will realise this path is worse and abandon it, and then go
                 # and search along the next best path.
-                neighbor_node.globaL_goal = neighbor_node.local_goal + getManhattanDistanceHeuristic(
+                neighbor_node.globaL_goal = neighbor_node.local_goal + get_Manhattan_Distance_Heuristic(
                     neighbor_node, stop_node)
 
     path: list = get_path(stop_node)
     cost: float = get_cost(path)
 
-    print_path(path)
-    print("Cost: " + str(cost))
+    return cost, path
