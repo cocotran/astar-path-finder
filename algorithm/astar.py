@@ -2,24 +2,22 @@ from map.node import Node
 from map.map import *
 
 
-def print_path(nodes: list) -> None:
+def print_path(path: list) -> None:
+    if len(path) > 0:
         print("Path: ", end="")
-        path: list = []
-        for i in nodes:
-            path.append(i.name)
-        for i in range(len(path) - 1):
-            print(path[i] + " --> ", end="")
-        print(path[-1]) if path[-1] != None else None
+        print('\033[92m' + path[-1].name + '\033[0m', end=' --> ')
+        for i in range(len(path) - 2, 1, -1):
+            print(path[i].name + " --> ", end="")
+        print('\033[93m' + path[1].name + '\033[0m') if path[1].name != None else None
 
 
 # The heuristic function estimates the cost to reach goal from node n.
 # This implmentation uses Manhattan Distance Heuristic
 def a_star(start_node: Node, stop_node: Node) -> tuple:
-
-    def get_Manhattan_Distance_Heuristic(current_node: Node,
-                                      end_node: Node) -> float:
-        distance: float = abs(current_node.x -
-                              end_node.x) + abs(current_node.y - end_node.y)
+    def get_Manhattan_Distance_Heuristic(current_node: Node, end_node: Node) -> float:
+        distance: float = abs(current_node.x - end_node.x) + abs(
+            current_node.y - end_node.y
+        )
         return distance
 
     def get_path(end_node: Node) -> list:
@@ -45,8 +43,7 @@ def a_star(start_node: Node, stop_node: Node) -> tuple:
     # Setup starting conditions
     current_node: Node = start_node
     start_node.local_goal = 0.0
-    start_node.global_goal = get_Manhattan_Distance_Heuristic(
-        start_node, stop_node)
+    start_node.global_goal = get_Manhattan_Distance_Heuristic(start_node, stop_node)
 
     # Add start node to not tested list - this will ensure it gets tested.
     # As the algorithm progresses, newly discovered nodes get added to this
@@ -81,8 +78,9 @@ def a_star(start_node: Node, stop_node: Node) -> tuple:
                 not_tested_nodes.append(neighbor_node)
 
             # Calculate the neighbors potential lowest parent distance
-            possibly_lower_goal: float = current_node.local_goal + neighbors[
-                neighbor_node]
+            possibly_lower_goal: float = (
+                current_node.local_goal + neighbors[neighbor_node]
+            )
 
             # If choosing to path through this node is a lower distance than what
             # the neighbour currently has set, update the neighbour to use this node
@@ -96,8 +94,10 @@ def a_star(start_node: Node, stop_node: Node) -> tuple:
                 # the path algorithm, so it knows if its getting better or worse. At some
                 # point the algo will realise this path is worse and abandon it, and then go
                 # and search along the next best path.
-                neighbor_node.globaL_goal = neighbor_node.local_goal + get_Manhattan_Distance_Heuristic(
-                    neighbor_node, stop_node)
+                neighbor_node.globaL_goal = (
+                    neighbor_node.local_goal
+                    + get_Manhattan_Distance_Heuristic(neighbor_node, stop_node)
+                )
 
     path: list = get_path(stop_node)
     cost: float = get_cost(path)

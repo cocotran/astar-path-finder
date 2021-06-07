@@ -1,6 +1,6 @@
 from map.node import *
 
-INF: float = float('inf')
+INF: float = float("inf")
 
 
 class Place:
